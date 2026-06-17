@@ -1,0 +1,4 @@
+com\supplysync\modules\storemanager\mapper\InventoryMapperImpl.class
+com\supplysync\modules\storemanager\mapper\ProductMapperImpl.class
+com\supplysync\modules\storemanager\mapper\NotificationMapperImpl.class
+com\supplysync\modules\storemanager\mapper\PurchaseOrderMapperImpl.class
