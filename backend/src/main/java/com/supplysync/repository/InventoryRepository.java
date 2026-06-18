@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     Optional<Inventory> findByProductId(Long productId);
+    Optional<Inventory> findByProduct(com.supplysync.entity.Product product);
     
     @Query("SELECT i FROM Inventory i WHERE i.quantity <= i.minThreshold")
     List<Inventory> findLowStockItems();

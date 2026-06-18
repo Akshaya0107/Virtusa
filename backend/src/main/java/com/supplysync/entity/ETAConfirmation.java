@@ -10,27 +10,32 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "stock_history")
+@Table(name = "eta_confirmations")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StockHistory {
+public class ETAConfirmation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "purchase_order_id")
+    private PurchaseOrder purchaseOrder;
 
-    @Column(nullable = false)
-    private int changeQuantity;
+    private LocalDateTime shipmentDate;
+    private LocalDateTime expectedDeliveryDate;
+    private String vehicleNumber;
+    private String deliveryNotes;
 
-    private String type; // ADDED, REMOVED, SOLD
-
-    private String reason;
+    @Enumerated(EnumType.STRING)
+    private ETAStatus status;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    public enum ETAStatus {
+        ON_TIME, DELAYED, PARTIAL_DELIVERY
+    }
 }

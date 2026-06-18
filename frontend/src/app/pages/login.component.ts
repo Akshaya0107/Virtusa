@@ -229,7 +229,16 @@ export class LoginComponent {
     this.error = '';
     this.auth.login(this.credentials).subscribe({
       next: (user) => {
-        this.router.navigate(['/dashboard']);
+        const roles = user.roles || [];
+        if (roles.includes('ROLE_WAREHOUSE')) {
+          this.router.navigate(['/warehouse/dashboard']);
+        } else if (roles.includes('ROLE_SUPPLIER')) {
+          this.router.navigate(['/supplier/dashboard']);
+        } else if (roles.includes('ROLE_STORE_MANAGER')) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
       },
       error: () => {
         this.error = 'Invalid email or password. Please try again.';

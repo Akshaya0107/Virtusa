@@ -10,4 +10,8 @@ public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Lo
     List<PurchaseOrder> findByOrderByOrderDateDesc();
     @Query("SELECT COUNT(po) FROM PurchaseOrder po WHERE po.status = 'PENDING'")
     long countPendingOrders();
+
+    List<PurchaseOrder> findBySupplierId(Long supplierId);
+    long countBySupplierId(Long supplierId);
+    long countBySupplierIdAndStatus(Long supplierId, PurchaseOrder.OrderStatus status);
 }

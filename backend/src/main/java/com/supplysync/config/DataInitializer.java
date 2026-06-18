@@ -24,6 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired private PurchaseOrderRepository purchaseOrderRepository;
     @Autowired private SalesRecordRepository salesRecordRepository;
     @Autowired private NotificationRepository notificationRepository;
+    @Autowired private ETAConfirmationRepository etaRepository;
     @Autowired private PasswordEncoder passwordEncoder;
 
     @Override
@@ -37,6 +38,7 @@ public class DataInitializer implements CommandLineRunner {
         initializePurchaseOrders(manager, suppliers, products);
         initializeSales(products);
         initializeNotifications();
+        initializeETAConfirmations();
     }
 
     private void initializeRoles() {
@@ -166,6 +168,26 @@ public class DataInitializer implements CommandLineRunner {
                         .title("Notification " + i)
                         .message("System message " + i)
                         .type("INFO")
+                        .build());
+            }
+        }
+    }
+
+    private void initializeETAConfirmations() {
+        if (etaRepository.count() == 0) {
+            List<PurchaseOrder> orders = purchaseOrderRepository.findAll();
+            for (int i = 0; i < 10 && i < orders.size(); i++) {
+                PurchaseOrder po = orders.get(i);
+                po.setStatus(PurchaseOrder.OrderStatus.CONFIRMED);
+                purchaseOrderRepository.save(po);
+
+                etaRepository.save(ETAConfirmation.builder()
+                        .purchaseOrder(po)
+                        .shipmentDate(LocalDateTime.now().minusDays(2))
+                        .expectedDeliveryDate(LocalDateTime.now().plusDays(3))
+                        .vehicleNumber("KA-0" + (i + 1) + "-XY-" + (1000 + i))
+                        .deliveryNotes("Regular shipment " + (i + 1))
+                        .status(ETAConfirmation.ETAStatus.ON_TIME)
                         .build());
             }
         }

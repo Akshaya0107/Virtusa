@@ -7,5 +7,5 @@ public interface InventoryService {
     List<InventoryResponseDTO> getAllInventory();
     InventoryResponseDTO updateStock(Long id, int quantity, String type, String reason);
     List<InventoryResponseDTO> getLowStockItems();
-    List<com.supplysync.entity.StockHistory> getMovementHistory();
+    List<com.supplysync.entity.StockMovement> getMovementHistory();
 }

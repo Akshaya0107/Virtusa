@@ -2,10 +2,10 @@ package com.supplysync.modules.storemanager.service.impl;
 
 import com.supplysync.modules.storemanager.dto.InventoryResponseDTO;
 import com.supplysync.entity.Inventory;
-import com.supplysync.entity.StockHistory;
+import com.supplysync.entity.StockMovement;
 import com.supplysync.modules.storemanager.mapper.InventoryMapper;
 import com.supplysync.repository.InventoryRepository;
-import com.supplysync.repository.StockHistoryRepository;
+import com.supplysync.repository.StockMovementRepository;
 import com.supplysync.modules.storemanager.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class InventoryServiceImpl implements InventoryService {
 
     @Autowired private InventoryRepository inventoryRepository;
-    @Autowired private StockHistoryRepository stockHistoryRepository;
+    @Autowired private StockMovementRepository stockMovementRepository;
     @Autowired private InventoryMapper inventoryMapper;
 
     @Override
@@ -43,7 +43,7 @@ public class InventoryServiceImpl implements InventoryService {
         int change = type.equalsIgnoreCase("ADD") ? quantity : -quantity;
         inventory.setQuantity(inventory.getQuantity() + change);
         
-        stockHistoryRepository.save(StockHistory.builder()
+        stockMovementRepository.save(StockMovement.builder()
                 .product(inventory.getProduct())
                 .changeQuantity(change)
                 .type(type)
@@ -61,7 +61,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public List<com.supplysync.entity.StockHistory> getMovementHistory() {
-        return stockHistoryRepository.findAll();
+    public List<StockMovement> getMovementHistory() {
+        return stockMovementRepository.findAll();
     }
 }

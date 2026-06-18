@@ -45,11 +45,16 @@ public class PurchaseOrder {
     @JoinColumn(name = "created_by")
     private User createdBy;
 
+    private String deliveryAddress;
+    private String contactPerson;
+    private String specialInstructions;
+    private String deliveryDeadline;
+
     @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<PurchaseOrderItem> items = new ArrayList<>();
 
     public enum OrderStatus {
-        PENDING, ORDERED, RECEIVED, CANCELLED
+        PENDING, CONFIRMED, SHIPPED, IN_TRANSIT, DELIVERED, CANCELLED
     }
 }
