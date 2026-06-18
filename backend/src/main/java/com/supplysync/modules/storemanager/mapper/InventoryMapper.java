@@ -11,5 +11,6 @@ public interface InventoryMapper {
     @Mapping(target = "productName", source = "product.name")
     @Mapping(target = "productSku", source = "product.sku")
     @Mapping(target = "category", source = "product.category.name")
+    @Mapping(target = "status", ignore = true)
     InventoryResponseDTO toResponseDto(Inventory inventory);
 }

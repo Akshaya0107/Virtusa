@@ -80,5 +80,11 @@ export const routes: Routes = [
     ]
   },
 
+  // Protected Finance Admin Routes
+  {
+    path: 'finance',
+    loadChildren: () => import('./modules/finance-admin/finance-admin.routes').then(m => m.FINANCE_ROUTES)
+  },
+
   { path: '**', redirectTo: '' }
 ];

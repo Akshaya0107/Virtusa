@@ -55,6 +55,6 @@ public class PurchaseOrder {
     private List<PurchaseOrderItem> items = new ArrayList<>();
 
     public enum OrderStatus {
-        PENDING, CONFIRMED, SHIPPED, IN_TRANSIT, DELIVERED, CANCELLED
+        PENDING, APPROVED, REJECTED, CONFIRMED, SHIPPED, IN_TRANSIT, DELIVERED, CANCELLED
     }
 }

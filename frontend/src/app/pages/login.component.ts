@@ -234,8 +234,8 @@ export class LoginComponent {
           this.router.navigate(['/warehouse/dashboard']);
         } else if (roles.includes('ROLE_SUPPLIER')) {
           this.router.navigate(['/supplier/dashboard']);
-        } else if (roles.includes('ROLE_STORE_MANAGER')) {
-          this.router.navigate(['/dashboard']);
+        } else if (roles.includes('ROLE_FINANCE_ADMIN')) {
+          this.router.navigate(['/finance/dashboard']);
         } else {
           this.router.navigate(['/dashboard']);
         }

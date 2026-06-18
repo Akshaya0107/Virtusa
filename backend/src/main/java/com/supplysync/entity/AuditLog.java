@@ -27,6 +27,10 @@ public class AuditLog {
     @Column(nullable = false)
     private String action;
 
+    private String adminName;
+    private String description;
+    private LocalDateTime timestamp;
+
     private String entityName;
     private Long entityId;
 

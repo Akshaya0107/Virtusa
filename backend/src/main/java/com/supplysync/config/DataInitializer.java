@@ -39,6 +39,78 @@ public class DataInitializer implements CommandLineRunner {
         initializeSales(products);
         initializeNotifications();
         initializeETAConfirmations();
+        initializeFinanceData(suppliers, products);
+    }
+
+    @Autowired private SupplierCostRepository supplierCostRepository;
+    @Autowired private SupplierPaymentRepository supplierPaymentRepository;
+    @Autowired private BudgetRepository budgetRepository;
+    @Autowired private AuditLogRepository auditLogRepository;
+    @Autowired private ExpenseRecordRepository expenseRecordRepository;
+
+    private void initializeFinanceData(List<Supplier> suppliers, List<Product> products) {
+        if (budgetRepository.count() == 0) {
+            budgetRepository.save(Budget.builder()
+                    .monthlyBudget(new BigDecimal("5000000"))
+                    .usedBudget(new BigDecimal("2500000"))
+                    .remainingBudget(new BigDecimal("2500000"))
+                    .fiscalYear("2026")
+                    .month("JUNE")
+                    .allocatedAmount(new BigDecimal("5000000"))
+                    .budgetYear(2026)
+                    .budgetMonth(java.time.Month.JUNE)
+                    .usedAmount(new BigDecimal("2500000"))
+                    .build());
+        }
+
+        if (supplierCostRepository.count() == 0) {
+            for (Supplier s : suppliers) {
+                supplierCostRepository.save(SupplierCost.builder()
+                        .supplier(s)
+                        .totalPurchaseCost(new BigDecimal(100000 + new Random().nextInt(400000)))
+                        .lastTransactionDate(LocalDateTime.now().minusDays(new Random().nextInt(30)))
+                        .unitCost(new BigDecimal(100 + new Random().nextInt(400)))
+                        .effectiveDate(LocalDateTime.now().minusDays(new Random().nextInt(30)))
+                        .currency("INR")
+                        .build());
+            }
+        }
+
+        if (supplierPaymentRepository.count() == 0) {
+            for (Supplier s : suppliers) {
+                supplierPaymentRepository.save(SupplierPayment.builder()
+                        .supplier(s)
+                        .amount(new BigDecimal(50000 + new Random().nextInt(150000)))
+                        .paymentDate(LocalDateTime.now().minusDays(new Random().nextInt(15)))
+                        .status(SupplierPayment.PaymentStatus.PAID)
+                        .transactionReference("TXN-" + System.currentTimeMillis() + s.getId())
+                        .build());
+            }
+        }
+
+        if (expenseRecordRepository.count() == 0) {
+            String[] categories = {"Electronics", "Logistics", "Warehouse", "Supplier Charges"};
+            for (String cat : categories) {
+                expenseRecordRepository.save(ExpenseRecord.builder()
+                        .category(cat)
+                        .amount(new BigDecimal(200000 + new Random().nextInt(800000)))
+                        .expenseDate(LocalDateTime.now().minusDays(new Random().nextInt(30)))
+                        .description("Monthly " + cat + " expense")
+                        .build());
+            }
+        }
+
+        if (auditLogRepository.count() == 0) {
+            User financeAdmin = userRepository.findByEmail("finance@supplysync.com").orElse(null);
+            auditLogRepository.save(AuditLog.builder()
+                    .user(financeAdmin)
+                    .adminName("Finance Admin")
+                    .action("REPORT_GENERATED")
+                    .description("Generated Monthly Procurement Report")
+                    .timestamp(LocalDateTime.now())
+                    .createdAt(LocalDateTime.now())
+                    .build());
+        }
     }
 
     private void initializeRoles() {
@@ -50,7 +122,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private User initializeDemoUsers() {
-        String commonPassword = passwordEncoder.encode("Admin@123");
+        String commonPassword = passwordEncoder.encode("password");
         User storeManager = null;
         
         String[][] users = {

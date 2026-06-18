@@ -14,6 +14,8 @@ public interface ProductMapper {
     @Mapping(target = "isDeleted", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "brand", ignore = true)
+    @Mapping(target = "supplier", ignore = true)
     Product toEntity(ProductRequestDTO request);
 
     @Mapping(target = "categoryName", source = "category.name")
